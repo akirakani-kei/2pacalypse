@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2PACALYPSE 2.3</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            align-items: flex-start;
+            background-color: #111;
+            color: green;
+            border: 2px solid #444;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .content {
+            flex: 1;
+            padding-right: 20px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px #000;
+            margin-bottom: 5px;
+        }
+
+        .info {
+            font-size: 16px;
+            color: lightgreen;
+            margin-bottom: 20px;
+        }
+
+        .inputs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .inputs input {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+            text-align: center;
+            width: 150px;
+        }
+
+        .button {
+            background-color: black;
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: none;
+            font-family: monospace;
+            border-radius: 20px;
+            display: inline-block;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .button span:nth-child(1) {
+            color: white;
+        }
+
+        .button span:nth-child(2) {
+            color: yellow;
+        }
+
+        .button span:nth-child(3) {
+            color: lightgreen;
+        }
+
+        .button:before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 2px solid white;
+            border-radius: 18px;
+            pointer-events: none;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-style: italic;
+            font-size: 14px;
+            color: lightgreen;
+        }
+
+        .image {
+            flex-shrink: 0;
+            margin-left: 20px;
+        }
+
+        img {
+            max-width: 300px;
+            height: auto;
+            border: 2px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="title">2PACALYPSE 2.3</div>
+            <div class="info">- Coded by keide$u -</div>
+            <div class="inputs">
+                <input type="text" id="ip" placeholder="IP: 64.231.75.201">
+                <input type="text" id="port" placeholder="Port: 80">
+            </div>
+            <button class="button" onclick="ddos()">
+                <span>D</span><span>D</span><span>o</span><span>S</span> <span>N</span><span>I</span><span>N</span><span>J</span><span>A</span><span>S</span>
+            </button>
+            <div class="footer">Botnets Online: <span id="botnets">22</span></div>
+            <div class="footer">r.i.p 2pac u were the meanin of lyfe - keide$u</div>
+        </div>
+        <div class="image">
+            <img src="assets/2pac.png" alt="2Pac Image">
+        </div>
+    </div>
+
+    <script>
+        const botnets = document.getElementById("botnets");
+        setInterval(() => {
+            botnets.textContent = Math.floor(Math.random() * 129);
+        }, 10000);
+    
+        function isvalidIP(ip) {
+            const regex = /^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])){3}$/;
+            return regex.test(ip);
+        }
+    
+        function isvalidPort(port) {
+            const portn = Number(port);
+            return portn >= 1 && portn <= 65535;
+        }
+    
+        async function getgeoip(ip) {
+            const response = await fetch(`http://ip-api.com/json/${ip}`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.status === "success") {
+                    return data.country;
+                }
+            }
+            throw new Error("failed to fetch location");
+        }
+    
+    
+        async function ddos() {
+            const ip = document.getElementById("ip").value.trim();
+            const port = document.getElementById("port").value.trim();
+    
+            if (!isvalidIP(ip)) {
+                alert("ip ain't for reals");
+                return;
+            }
+    
+            if (!isvalidPort(port)) {
+                alert("port ain't in range");
+                return;
+            }
+    
+            let country;
+            try {
+                country = await getgeoip(ip);
+            } catch (error) {
+                alert("ip not fr (unable to determine location)");
+                return;
+            }
+
+                    alert(`SENDING PACKETS TO ${country.toUpperCase()} (network exists)`);
+                    return;
+        }
+    </script>
+</body>
+</html>
