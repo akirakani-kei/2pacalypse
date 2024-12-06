@@ -131,7 +131,7 @@
             <div class="info">- Coded by keide$u -</div>
             <div class="inputs">
                 <input type="text" id="ip" placeholder="IP: 64.231.75.201">
-                <input type="text" id="port" placeholder="Port: 80">
+                <input type="text" id="port" placeholder="Port: 1-65535">
             </div>
             <button class="button" onclick="ddos()">
                 <span>D</span><span>D</span><span>o</span><span>S</span> <span>N</span><span>I</span><span>N</span><span>J</span><span>A</span><span>S</span>
@@ -160,49 +160,51 @@
             return portn >= 1 && portn <= 65535;
         }
     
-        async function getgeoip(ip) {
+    async function getgeoip(ip) {
     const url = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://ipwhois.app/json/${ip}`)}`;
     try {
         const response = await fetch(url);
         if (response.ok) {
             const proxydata = await response.json(); 
             const data = JSON.parse(proxydata.contents);
-            return data.country || "saddam hussein hideout (unknown location)";
-        } else {
+
+            if (!data.country || data.country == "")
+                throw new Error("target is located in saddam hussein's hideout (unable to determine location in spite of ip probably being valid)");
+
+            if (data.success)
+                delete data.success;
+            
+            return data;
+        } else
             throw new Error(`proxy request failed: ${response.statusText}`);
-        }
     } catch (error) {
         console.error(error);
-        throw new Error("unable to fetch location (proxy or api error)");
+        throw new Error("unable to fetch location; double check ip(?)");
     }
 }
-    
-    
-        async function ddos() {
-            const ip = document.getElementById("ip").value.trim();
-            const port = document.getElementById("port").value.trim();
-    
-            if (!isvalidIP(ip)) {
-                alert("ip ain't for reals");
-                return;
-            }
-    
-            if (!isvalidPort(port)) {
-                alert("port ain't in range");
-                return;
-            }
-    
-            let country;
-            try {
-                country = await getgeoip(ip);
-            } catch (error) {
-                alert("ip not fr (unable to determine location)");
-                return;
-            }
 
-                    alert(`SENDING PACKETS TO ${country.toUpperCase()} (network exists)`);
-                    return;
-        }
+async function ddos() {
+    const ip = document.getElementById("ip").value.trim();
+    const port = document.getElementById("port").value.trim();
+
+    if (!isvalidIP(ip)) {
+        alert("ip ain't for reals");
+        return;
+    }
+
+    if (!isvalidPort(port)) {
+        alert("port ain't in range");
+        return;
+    }
+
+    try {
+        const data = await getgeoip(ip);
+        alert(`SENDING PACKETS TO: ${data.country.toUpperCase()}\n\n${JSON.stringify(data, null, 2)}`);
+    } catch (exrror) {
+        alert(`ip not fr (${error.message})`);
+    }
+}
+
     </script>
 </body>
 </html>
