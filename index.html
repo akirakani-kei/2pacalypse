@@ -200,7 +200,7 @@ async function ddos() {
     try {
         const data = await getgeoip(ip);
         alert(`SENDING PACKETS TO: ${data.country.toUpperCase()}\n\n${JSON.stringify(data, null, 2)}`);
-    } catch (exrror) {
+    } catch (error) {
         alert(`ip not fr (${error.message})`);
     }
 }
