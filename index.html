@@ -161,15 +161,21 @@
         }
     
         async function getgeoip(ip) {
-            const response = await fetch(`https://ip-api.com/json/${ip}`);
-            if (response.ok) {
-                const data = await response.json();
-                if (data.status === "success") {
-                    return data.country;
-                }
-            }
-            throw new Error("failed to fetch location");
+    const url = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://ipwhois.app/json/${ip}`)}`;
+    try {
+        const response = await fetch(url);
+        if (response.ok) {
+            const proxydata = await response.json(); 
+            const data = JSON.parse(proxydata.contents);
+            return data.country || "saddam hussein hideout (unknown location)";
+        } else {
+            throw new Error(`proxy request failed: ${response.statusText}`);
         }
+    } catch (error) {
+        console.error(error);
+        throw new Error("unable to fetch location (proxy or api error)");
+    }
+}
     
     
         async function ddos() {
